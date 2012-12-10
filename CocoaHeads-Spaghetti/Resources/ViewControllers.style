@@ -1,0 +1,50 @@
+{
+    "@import" : [
+        "Appearance"
+    ],
+    
+    "CKFormTableViewController" : {
+        "style" : "UITableViewStyleGrouped",
+        
+        "view" : {
+            "backgroundColor" : "0.79 0.79 0.79 1"
+        },
+        "tableView" : {
+            "backgroundColor" : "clearColor"  
+        },
+        
+        "sectionHeaderView" : {
+            "backgroundColor" : "clearColor",
+            "label" : {
+                "@inherits" : [ "$text_dark_shadow" ],
+                "textColor" : "whiteColor"
+            }
+        },
+        
+        "CKTableViewCellController" : {
+            "contentInsets" : "15 10 15 10",
+            "enableNavigationToolbar" : 1,
+            "UITableViewCell" : {
+                "backgroundView" : {
+                    "@inherits" : [ "$lightGradient" ],
+                    "borderColor" : "lightGrayColor",
+                    "borderWidth" : 1,
+                    "cornerSize" : 5,
+                    
+                    "borderShadowColor" : "0 0 0 0.6",
+                    "borderShadowRadius" : 6,
+                    "borderShadowOffset" : "0 0"
+                },
+                "selectedBackgroundView" : {
+                    "@inherits" : [ "$blueGradient" ],
+                    "borderColor" : "lightGrayColor",
+                    "cornerSize" : 5,
+                    "borderWidth" : 1
+                },
+                "textLabel" : {
+                    "@inherits" : [ "$cell_title_font", "$transparent_background", "$text_light_shadow" ]
+                }
+            }
+        }
+    }
+}

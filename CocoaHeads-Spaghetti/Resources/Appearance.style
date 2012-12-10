@@ -1,0 +1,42 @@
+{
+    "$cell_title_font" : {
+        "font" : [ "Helvetica-Bold", 14 ]
+    },
+    
+    "$transparent_background" : {
+        "backgroundColor" : "clearColor"
+    },
+    
+    "$lightGradient" : {
+        "backgroundGradientColors" : [ "0.966 0.966 0.966 1", "0.884 0.884 0.884 1" ],
+		"backgroundGradientLocations" : [ "0","1" ],
+		"embossTopColor" : "whiteColor"
+    },
+    
+    "$blueGradient" : {
+        "backgroundGradientColors" : [
+                                      "0.412 0.620 0.761 1",
+                                      "0.000 0.424 0.722 1",
+                                      "0.000 0.239 0.455 1",
+                                      "0.000 0.114 0.263 1"
+                                      ],
+		"backgroundGradientLocations" : [
+                                         "0",
+                                         "0.05",
+                                         "0.95",
+                                         "1"
+                                         ],
+        "borderColor" : "clearColor"
+    },
+    
+    "$text_dark_shadow" : {
+        "shadowColor" : "blackColor",
+        "shadowOffset" : "0 1"
+    },
+    
+    "$text_light_shadow" : {
+        "shadowColor" : "0xFFFFFF 1",
+        "shadowOffset" : "0 1",
+        "highlightedShadowColor" : "clearColor"
+    }
+}

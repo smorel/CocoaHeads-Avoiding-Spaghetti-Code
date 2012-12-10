@@ -1,0 +1,97 @@
+{
+    "$navigation_title_label" : {
+        "fontName" : "Helvetica-Bold",
+        "fontSize" : "18",
+        "textColor" : "whiteColor"
+    },
+    
+    "$back_button" : {
+        "defaultBackgroundImage" : "btn-back",
+        "highlightedBackgroundImage" : "btn-back-highlight",
+        "width" : 36,
+        "defaultTitle" : ""
+    },
+    
+    "$bar_button" : {
+        "defaultBackgroundImage" : ["uppernav_button", "10 0" ],
+        "highlightedBackgroundImage" : ["uppernav_button-pressed", "10 0" ],
+        "contentEdgeInsets" : "10 10 10 10",
+        "defaultTextColor" : "blackColor",
+        "font" : ["Helvetica-Bold", 14]
+    },
+    
+    "$base_nav" : {
+        "navigationBar" : {
+            "layer" : {
+                "shadowColor" : "blackColor",
+                "shadowRadius" : 2,
+                "shadowOffset" : "0 1",
+                "shadowOpacity" : "0.4"
+            },
+            
+            "titleView" : {
+                "@inherits" : [ "$navigation_title_label" ],
+                "backgroundColor" : "clearColor",
+                "shadowColor" : "darkGrayColor",
+                "shadowOffset" : "0 -1"
+            },
+            
+            "backBarButtonItem" : {
+                "@inherits" : [ "$back_button" ]
+            },
+            
+            "UIBarButtonItem" : {
+                "@inherits" : [ "$bar_button" ]
+            }
+        },
+        
+        "toolbar" : {
+            "layer" : {
+                "shadowColor" : "blackColor",
+                "shadowRadius" : 2,
+                "shadowOffset" : "0 -1",
+                "shadowOpacity" : "0.4"
+            }
+        }
+    },
+    
+    "UINavigationController[navigationBar.width=320]" : {
+        "@inherits" : [ "$base_nav" ],
+        "navigationBar" : {
+            "backgroundImage" : "background_nav",
+            
+            "backBarButtonItem" : {
+                "@inherits" : [ "$back_button" ],
+                "height" : 36
+            },
+            
+            "UIBarButtonItem" : {
+                "@inherits" : [ "$bar_button" ],
+                "height" : 36
+            }
+        },
+        "toolbar" : {
+            "backgroundImage" : "background_nav"
+        }
+    },
+    
+    "UINavigationController[navigationBar.width=480]" : {
+        "@inherits" : [ "$base_nav" ],
+        "navigationBar" : {
+            "backgroundImage" : "background_nav-480",
+            
+            "backBarButtonItem" : {
+                "@inherits" : [ "$back_button" ],
+                "height" : 26
+            },
+            
+            "UIBarButtonItem" : {
+                "@inherits" : [ "$bar_button" ],
+                "height" : 26
+            }
+        },
+        "toolbar" : {
+            "backgroundImage" : "background_nav-480"
+        }
+    }
+}

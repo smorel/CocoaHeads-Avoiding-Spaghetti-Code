@@ -1,0 +1,37 @@
+{
+    "$Tweet" : {
+        "@class" : "Tweet",
+    
+        "text" : "text",
+        "identifier" : "id_str",
+        "user" : {
+            "@keyPath" : "user",
+            "@transformClass" : "WebService",
+            "@transformSelector" : "userFromValue:error:"
+        }
+    },
+    
+    "$UserBase" : {
+        "@class" : "User",
+        "avatarURL" : "profile_image_url",
+        "name" : "name",
+        "identifier" : "id_str"
+    },
+    
+    "$UserDetails" : {
+        "@inherits" : [ "$UserBase" ],
+        
+        "backgroundImageURL" : "profile_background_image_url",
+        "numberOfFollowers" : "followers_count",
+        "numberOfFriends" : "friends_count",
+        "city" : "location",
+        "details" : "description",
+        
+        //Sets hasFetchedDetails to 1 when mapping the results
+        "hasFetchedDetails" : {
+            "@keyPath" : "NONE",
+            "@optional" : 1,
+            "@defaultValue" : 1
+        }
+    }
+}
