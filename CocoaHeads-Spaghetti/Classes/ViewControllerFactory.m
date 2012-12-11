@@ -102,4 +102,28 @@
     return form;
 }
 
+
++ (CKViewController*)viewControllerForPendingOperation{
+    CKViewController* controller = [CKViewController controllerWithName:@"PendingOperation"];
+    controller.viewDidLoadBlock = ^(CKViewController* controller){
+        UIActivityIndicatorView* spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        spinner.center = CGPointMake(controller.view.width/2,controller.view.height/2);
+        spinner.autoresizingMask = UIViewAutoresizingFlexibleAllMargins;
+        spinner.name = @"Spinner";
+        [controller.view addSubview:spinner];
+    };
+    
+    controller.viewWillAppearBlock = ^(CKViewController* controller, BOOL animated){
+        UIActivityIndicatorView* spinner = [controller.view viewWithKeyPath:@"Spinner"];
+        [spinner startAnimating];
+    };
+    
+    controller.viewWillDisappearBlock = ^(CKViewController* controller, BOOL animated){
+        UIActivityIndicatorView* spinner = [controller.view viewWithKeyPath:@"Spinner"];
+        [spinner stopAnimating];
+    };
+    
+    return controller;
+}
+
 @end

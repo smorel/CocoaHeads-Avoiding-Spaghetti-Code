@@ -22,4 +22,8 @@ typedef enum UserIntent{ UserTweetAvatarTouchIntent = TweetAvatarTouchIntent, Us
 + (CKViewController*)viewControllerForUserDetails:(User*)user
                                            intent:(void(^)(CKViewController* viewController, NSInteger intent, id object))intent;
 
+
+
++ (CKViewController*)viewControllerForPendingOperation;
+
 @end

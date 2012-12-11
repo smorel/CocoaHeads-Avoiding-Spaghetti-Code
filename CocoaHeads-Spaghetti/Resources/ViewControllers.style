@@ -38,7 +38,7 @@
                 },
                 "selectedBackgroundView" : {
                     "@inherits" : [ "$blueGradient" ],
-                    "borderColor" : "lightGrayColor",
+                    "borderColor" : "darkGrayColor",
                     "cornerSize" : 4,
                     "borderWidth" : 1
                 },

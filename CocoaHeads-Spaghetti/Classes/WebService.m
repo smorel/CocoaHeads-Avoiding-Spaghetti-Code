@@ -53,6 +53,33 @@
 }
 
 
++ (void)asyncTwitterRequestWithURL:(NSURL*)url params:(NSDictionary*)params completion:(void(^)(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error ))completion{
+    //Initialize static GCD queue for twitter requests
+    static dispatch_queue_t twitterQueue = nil;
+    if(!twitterQueue){
+        twitterQueue = dispatch_queue_create("com.wherecloud.spaghetti", 0);
+    }
+    
+    [self requestTwitterAccountWithCompletionBlock:^(ACAccount* account){
+        if(!account){
+            [self performSelector:@selector(authentificationError) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
+        }else{
+            dispatch_async(twitterQueue, ^{
+                TWRequest *request = [[TWRequest alloc] initWithURL:url
+                                                         parameters:params
+                                                      requestMethod:TWRequestMethodGET];
+                request.account = account;
+                
+                // Notice this is a block, it is the handler to process the response
+                [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
+                    completion(responseData,urlResponse,error);
+                }];
+            });
+        }
+    }];
+     
+}
+
 + (CKFeedSource*)feedSourceForTimelineWithURl:(NSURL*)url params:(NSDictionary*)params{
     CKFeedSource* feedSource = [CKFeedSource feedSource];
     
@@ -60,45 +87,34 @@
         CKCollection* associatedCollection = (CKCollection*)[feedSource delegate];
         NSString* lastId = (range.location > 0) ? [[associatedCollection objectAtIndex:range.location-1]identifier] : nil;
         
-        [self requestTwitterAccountWithCompletionBlock:^(ACAccount* account){
-            if(!account){
-                [self performSelector:@selector(authentificationError) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
-            }else{
-                NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                             //As max_id returns the previous one in the payload we ask for 1 more
-                                             [NSString stringWithFormat:@"%d",range.length + (lastId ? 1 : 0)],@"count",
-                                             lastId,@"max_id",
-                                             nil];
-                [dico addEntriesFromDictionary:params];
+        NSMutableDictionary* dico = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                     //As max_id returns the previous one in the payload we ask for 1 more
+                                     [NSString stringWithFormat:@"%d",range.length + (lastId ? 1 : 0)],@"count",
+                                     lastId,@"max_id",
+                                     nil];
+        [dico addEntriesFromDictionary:params];
+        
+        [self asyncTwitterRequestWithURL:url params:dico completion:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+            if ([urlResponse statusCode] == 200){
+                // The response from Twitter is in JSON format
+                // Move the response into a dictionary and print
+                NSError *error;
+                NSArray *dict = [NSObject objectFromJSONData:responseData error:&error];
+                CKMappingContext* context = [CKMappingContext contextWithIdentifier:@"$Tweet"];
+                NSArray* tweets = [context objectsFromValue:dict error:&error];
                 
-                TWRequest *request = [[TWRequest alloc] initWithURL:url
-                                                         parameters:dico
-                                                      requestMethod:TWRequestMethodGET];
-                request.account = account;
-                
-                // Notice this is a block, it is the handler to process the response
-                [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
-                    if ([urlResponse statusCode] == 200){
-                        // The response from Twitter is in JSON format
-                        // Move the response into a dictionary and print
-                        NSError *error;
-                        NSArray *dict = [NSObject objectFromJSONData:responseData error:&error];
-                        CKMappingContext* context = [CKMappingContext contextWithIdentifier:@"$Tweet"];
-                        NSArray* tweets = [context objectsFromValue:dict error:&error];
-                        
-                        if([tweets count] > 1){
-                            //As max_id returns the previous one in the payload weremove the ist item from the returned list
-                            [feedSource addItems:[NSArray arrayWithArray:[tweets objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [tweets count] - 1)]]]];
-                        }else{
-                            [feedSource cancelFetch];
-                        }
-                    }
-                    else{
-                        [feedSource cancelFetch];
-                        NSLog(@"Twitter error, HTTP response: %i", [urlResponse statusCode]);
-                    }
-                }];
+                if([tweets count] > 1){
+                    //As max_id returns the previous one in the payload weremove the ist item from the returned list
+                    [feedSource addItems:[NSArray arrayWithArray:[tweets objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [tweets count] - 1)]]]];
+                }else{
+                    [feedSource cancelFetch];
+                }
             }
+            else{
+                [feedSource cancelFetch];
+                NSLog(@"Twitter error, HTTP response: %i", [urlResponse statusCode]);
+            }
+
         }];
     };
     return feedSource;
@@ -113,39 +129,28 @@
 }
 
 + (void)performRequestForUserDetails:(User*)user completion:(void(^)(User* user, NSError* error))completionBlock{
-    [self requestTwitterAccountWithCompletionBlock:^(ACAccount* account){
-        if(!account){
-            [self performSelector:@selector(authentificationError) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
-        }else{
-            TWRequest *request = [[TWRequest alloc] initWithURL:[NSURL URLWithString:
-                                                                 @"http://api.twitter.com/1.1/users/show.json"]
-                                                     parameters:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                 user.identifier,@"user_id",
-                                                                 nil]
-                                                  requestMethod:TWRequestMethodGET];
-            request.account = account;
+    
+    
+    [self asyncTwitterRequestWithURL:[NSURL URLWithString: @"http://api.twitter.com/1.1/users/show.json"]
+                              params:[NSDictionary dictionaryWithObjectsAndKeys:user.identifier,@"user_id",nil]
+                          completion:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+        if ([urlResponse statusCode] == 200){
+            // The response from Twitter is in JSON format
+            // Move the response into a dictionary and print
+            NSError *error;
+            NSArray *dict = [NSObject objectFromJSONData:responseData error:&error];
+            CKMappingContext* context = [CKMappingContext contextWithIdentifier:@"$UserDetails"];
+            [context mapValue:dict toObject:user error:&error];
             
-            // Notice this is a block, it is the handler to process the response
-            [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
-                if ([urlResponse statusCode] == 200){
-                    // The response from Twitter is in JSON format
-                    // Move the response into a dictionary and print
-                    NSError *error;
-                    NSArray *dict = [NSObject objectFromJSONData:responseData error:&error];
-                    CKMappingContext* context = [CKMappingContext contextWithIdentifier:@"$UserDetails"];
-                    [context mapValue:dict toObject:user error:&error];
-                    
-                    if(completionBlock){
-                        completionBlock(user,NULL);
-                    }
-                }
-                else{
-                    NSLog(@"Twitter error, HTTP response: %i", [urlResponse statusCode]);
-                    if(completionBlock){
-                        completionBlock(user,error);
-                    }
-                }
-            }];
+            if(completionBlock){
+                completionBlock(user,NULL);
+            }
+        }
+        else{
+            NSLog(@"Twitter error, HTTP response: %i", [urlResponse statusCode]);
+            if(completionBlock){
+                completionBlock(user,error);
+            }
         }
     }];
 }

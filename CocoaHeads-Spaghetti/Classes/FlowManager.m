@@ -55,7 +55,7 @@
     __block FlowManager* bself = self;
     
     //As this code will get called several times Asynchronously or synchronously, we centralize it in a block that gets the job done!
-    void(^presentationBlock)() = ^(){
+    void(^presentationBlock)(CKContainerViewController* container, BOOL animated) = ^(CKContainerViewController* container, BOOL animated){
         CKViewController* controllerForUserDetails = [ViewControllerFactory viewControllerForUserDetails:user intent:^(CKViewController *viewController, NSInteger intent, id object) {
             switch(intent){
                 case UserTweetAvatarTouchIntent:{
@@ -73,24 +73,32 @@
             }
         }];
         controllerForUserDetails.title = user.name;
-        [viewController.navigationController pushViewController:controllerForUserDetails animated:YES];
+        
+        NSMutableArray* controllers = [NSMutableArray arrayWithArray:[container viewControllers]];
+        [controllers addObject:controllerForUserDetails];
+        [container setViewControllers:controllers];
+        
+        [container presentViewControllerAtIndex:1 withTransition:animated ? CKTransitionCrossDissolve : CKTransitionNone];
     };
     
     
+    CKViewController* pendingViewController = [ViewControllerFactory viewControllerForPendingOperation];
+    pendingViewController.title = user.name;
+    
+    CKContainerViewController* container = [CKContainerViewController controller];
+    [container setViewControllers:[NSArray arrayWithObject:pendingViewController]];
+    
     if(!user.hasFetchedDetails){
-        //Fetch the user detail and presents the user detail controller at the end of the asynchronous fetch operation.
-        //Display a spinner on top of viewController while performing this operation
-        
-        //Display spinner on top of viewController
         [WebService performRequestForUserDetails:user completion:^(User *user, NSError *error) {
-            //Hides spinner from top of viewController
             if(!error){
-                presentationBlock();
+                presentationBlock(container,YES);
             }
         }];
     }else{
-        presentationBlock();
+        presentationBlock(container,NO);
     }
+    
+    [viewController.navigationController pushViewController:container animated:YES];
 }
 
 - (void)presentsViewControllerForTweetDetails:(Tweet*)tweet fromViewController:(CKViewController*)viewController{
