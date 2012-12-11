@@ -41,7 +41,7 @@
     
     //Customizing the ViewController navigation item (This is specific for the iPhone Flow)
     __block CKViewController* bTimelineController = timelineController;
-    timelineController.title = _(@"Spaghetti - Home");
+    timelineController.title = _(@"Home");
     
     //Sets the window's root view controller
     UINavigationController* leftNavigationController = [UINavigationController navigationControllerWithRootViewController:timelineController];
@@ -53,6 +53,7 @@
     self.rightViewController.rightButton = [[UIBarButtonItem alloc]initWithTitle:_(@"Write") style:UIBarButtonItemStyleBordered block:^{
         [bself presentsViewControllerForNewTweetFromViewController:bTimelineController];
     }];
+    self.rightViewController.title = _(@"Spaghetti");
     
     UINavigationController* rightNavigationController = [UINavigationController navigationControllerWithRootViewController:self.rightViewController];
     
@@ -75,12 +76,15 @@
 - (void)presentsViewControllerForUserDetails:(User*)user fromViewController:(CKViewController*)viewController{
     __block FlowManagerPad* bself = self;
     
+    //Setups the user timeline feed source
+    user.userTimeline.tweets.feedSource = [WebService feedSourceForUserTimeline:user.identifier];
+    
     //We wrap 2 controllers that can be created at different time in a container controller.
     //A pending controller displaying a spinner and the user detail controller that will get created when the data has been fetched.
     //This is particularily usefull for defining the pending visual and to swicth with animations.
     
     CKViewController* pendingViewController = [ViewControllerFactory viewControllerForPendingOperation];
-    pendingViewController.title = user.name;
+    pendingViewController.title = _(@"Spaghetti");
     
     CKContainerViewController* container = [CKContainerViewController controller];
     [container setViewControllers:[NSArray arrayWithObject:pendingViewController]];
@@ -108,6 +112,15 @@
             }
         }];
         controllerForUserDetails.title = user.name;
+        
+        
+        //Binds the form title property to the user's name property as it can change dynamically
+        __block CKViewController* bControllerForUserDetails = controllerForUserDetails;
+        [controllerForUserDetails beginBindingsContextByKeepingPreviousBindings];
+        [user bind:@"name" executeBlockImmediatly:YES withBlock:^(id value) {
+            bControllerForUserDetails.title = [NSString stringWithFormat:@"%@ - %@",_(@"Spaghetti"),user.name];
+        }];
+        [controllerForUserDetails endBindingsContext];
         
         NSMutableArray* controllers = [NSMutableArray arrayWithArray:[container viewControllers]];
         [controllers addObject:controllerForUserDetails];

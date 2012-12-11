@@ -80,10 +80,7 @@
     CKFormSection* detailsSection = [CKFormSection sectionWithCellControllers:[NSArray arrayWithObjects:nameCellController,detailCellController,cityCellController,friendsCellController,followersCellController,sendMessageCellController,nil]];
     
     //User tweets section
-    Timeline* userTimeline = [Timeline object];
-    userTimeline.tweets.feedSource = [WebService feedSourceForUserTimeline:user.identifier];
-    
-    CKFormBindedCollectionSection* userTweetsSection = [self sectionForTimeline:userTimeline intent:intentBlock];
+    CKFormBindedCollectionSection* userTweetsSection = [self sectionForTimeline:user.userTimeline intent:intentBlock];
     userTweetsSection.headerTitle = _(@"User Tweets");
     
     //Creates a form with the details and user timeline sections
@@ -98,11 +95,6 @@
         backgroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
         [controller.view insertSubview:backgroundView atIndex:0];
     };
-    
-    //Binds the form title property to the user's name property as it can change dynamically
-    [form beginBindingsContextByRemovingPreviousBindings];
-    [user bind:@"name" toObject:form withKeyPath:@"title"];
-    [form endBindingsContext];
     
     return form;
 }

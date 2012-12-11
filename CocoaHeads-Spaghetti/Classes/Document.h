@@ -8,6 +8,8 @@
 
 #import <AppCoreKit/AppCoreKit.h>
 
+@class Timeline;
+
 //User -----------------------------------------------------------------------
 
 @interface User : CKObject
@@ -27,6 +29,7 @@
 @property(nonatomic,assign) NSInteger numberOfFriends;
 @property(nonatomic,copy)   NSString* city;
 @property(nonatomic,copy)   NSString* details;
+@property(nonatomic,retain) Timeline* userTimeline;
 @end
 
 

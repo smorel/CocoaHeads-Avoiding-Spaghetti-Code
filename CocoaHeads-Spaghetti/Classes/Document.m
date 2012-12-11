@@ -9,6 +9,12 @@
 #import "Document.h"
 
 @implementation User
+
+- (void)postInit{
+    [super postInit];
+    self.userTimeline = [Timeline object];
+}
+
 @end
 
 @implementation Tweet

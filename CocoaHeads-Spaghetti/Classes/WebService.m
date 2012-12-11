@@ -50,8 +50,12 @@
 
 + (void)performBlockWithObjects:(NSArray*)objects{
     void(^block)(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error ) = [objects objectAtIndex:0];
-    id errorObject = [objects objectAtIndex:3];
-    block([objects objectAtIndex:1],[objects objectAtIndex:2],[errorObject isKindOfClass:[NSNull class]] ? nil : errorObject);
+    id responseDataObject = ([objects count] >= 1) ? [objects objectAtIndex:1] : nil;
+    id urlResponseObject = ([objects count] >= 2) ? [objects objectAtIndex:2] : nil;
+    id errorObject = ([objects count] >= 3) ? [objects objectAtIndex:3] : nil;
+    block([responseDataObject isKindOfClass:[NSNull class]] ? nil : responseDataObject,
+          [urlResponseObject isKindOfClass:[NSNull class]] ? nil : urlResponseObject,
+          [errorObject isKindOfClass:[NSNull class]] ? nil : errorObject);
 }
 
 + (void)asyncTwitterRequestWithURL:(NSURL*)url
@@ -71,7 +75,12 @@
             
             [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
                 //Dispatch Completion on Main Thread
-                NSArray* objects = [NSArray arrayWithObjects:[completion copy],responseData,urlResponse, error ? error : [NSNull null], nil];
+                NSArray* objects = [NSArray arrayWithObjects:
+                                    [completion copy],
+                                    responseData? responseData : [NSNull null],
+                                    urlResponse ? urlResponse : [NSNull null],
+                                    error ? error : [NSNull null],
+                                    nil];
                 [self performSelectorOnMainThread:@selector(performBlockWithObjects:) withObject:objects waitUntilDone:YES];
             }];
         }

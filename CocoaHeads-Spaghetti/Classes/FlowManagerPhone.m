@@ -52,6 +52,9 @@
 - (void)presentsViewControllerForUserDetails:(User*)user fromViewController:(CKViewController*)viewController{
     __block FlowManagerPhone* bself = self;
     
+    //Setups the user timeline feed source
+    user.userTimeline.tweets.feedSource = [WebService feedSourceForUserTimeline:user.identifier];
+    
     //We wrap 2 controllers that can be created at different time in a container controller.
     //A pending controller displaying a spinner and the user detail controller that will get created when the data has been fetched.
     //This is particularily usefull for defining the pending visual and to swicth with animations.
@@ -84,8 +87,13 @@
                 }
             }
         }];
-        controllerForUserDetails.title = user.name;
         
+        //Binds the form title property to the user's name property as it can change dynamically
+        [controllerForUserDetails beginBindingsContextByKeepingPreviousBindings];
+        [user bind:@"name" toObject:controllerForUserDetails withKeyPath:@"title"];
+        [controllerForUserDetails endBindingsContext];
+        
+        //Presents the controller with cross fade if animated
         NSMutableArray* controllers = [NSMutableArray arrayWithArray:[container viewControllers]];
         [controllers addObject:controllerForUserDetails];
         [container setViewControllers:controllers];
