@@ -19,7 +19,7 @@
     
     //Setup the document and its remote data source
     Timeline* sharedTimeline = [Timeline sharedInstance];
-    sharedTimeline.tweets.feedSource = [WebService feedSourceForTimeline];
+    sharedTimeline.tweets.feedSource = [WebService feedSourceForHomeTimeline];
     
     //Create the view controller by passing the data it should represents and managing its intent
     CKViewController* timelineController = [ViewControllerFactory viewControllerForTimeline:sharedTimeline
@@ -39,7 +39,7 @@
     
     //Customizing the ViewController navigation item (This is specific for the iPhone Flow)
     __block CKViewController* bTimelineController = timelineController;
-    timelineController.title = _(@"Timeline");
+    timelineController.title = _(@"Spaghetti - Home");
     timelineController.rightButton = [[UIBarButtonItem alloc]initWithTitle:_(@"Write") style:UIBarButtonItemStyleBordered block:^{
         [bself presentsViewControllerForNewTweetFromViewController:bTimelineController];
     }];

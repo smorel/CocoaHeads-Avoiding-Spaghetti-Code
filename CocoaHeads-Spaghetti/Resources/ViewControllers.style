@@ -5,6 +5,7 @@
     
     "CKFormTableViewController" : {
         "style" : "UITableViewStyleGrouped",
+        "rowInsertAnimation" : "UITableViewRowAnimationFade",
         
         "view" : {
             "backgroundColor" : "0.79 0.79 0.79 1"

@@ -12,7 +12,7 @@
 
 @interface WebService : NSObject
 
-+ (CKFeedSource*) feedSourceForTimeline;
++ (CKFeedSource*) feedSourceForHomeTimeline;
 + (CKFeedSource*) feedSourceForUserTimeline:(NSString*)userIdentifier;
 
 + (void)performRequestForUserDetails:(User*)user completion:(void(^)(User* user, NSError* error))completion;

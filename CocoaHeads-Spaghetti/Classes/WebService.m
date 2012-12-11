@@ -10,10 +10,6 @@
 #import <Twitter/Twitter.h>
 #import <Accounts/Accounts.h>
 
-//TWRequest are not multi-threaded
-//We could have used GCD to get data asynchronously in background
-
-
 @implementation WebService
 
 
@@ -55,16 +51,16 @@
 
 + (void)asyncTwitterRequestWithURL:(NSURL*)url params:(NSDictionary*)params completion:(void(^)(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error ))completion{
     //Initialize static GCD queue for twitter requests
-    static dispatch_queue_t twitterQueue = nil;
-    if(!twitterQueue){
-        twitterQueue = dispatch_queue_create("com.wherecloud.spaghetti", 0);
-    }
+    //static dispatch_queue_t twitterQueue = nil;
+    //if(!twitterQueue){
+    //    twitterQueue = dispatch_queue_create("com.wherecloud.spaghetti", 0);
+    //}
     
     [self requestTwitterAccountWithCompletionBlock:^(ACAccount* account){
         if(!account){
             [self performSelector:@selector(authentificationError) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
         }else{
-            dispatch_async(twitterQueue, ^{
+            //dispatch_async(twitterQueue, ^{
                 TWRequest *request = [[TWRequest alloc] initWithURL:url
                                                          parameters:params
                                                       requestMethod:TWRequestMethodGET];
@@ -74,7 +70,7 @@
                 [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
                     completion(responseData,urlResponse,error);
                 }];
-            });
+            //});
         }
     }];
      
@@ -120,7 +116,7 @@
     return feedSource;
 }
 
-+ (CKFeedSource*)feedSourceForTimeline{
++ (CKFeedSource*)feedSourceForHomeTimeline{
     return [self feedSourceForTimelineWithURl:[NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/home_timeline.json"] params:nil];
 }
 
@@ -158,14 +154,26 @@
 //Special transformer registering user in a shared register in order to get one unique instance per user in memory
 + (User*)userFromValue:(NSDictionary*)dictionary error:(NSError**)error{
     NSString* identifier = [dictionary objectForKey:@"id_str"];
-    User* existingUser = [[[UserRegistry sharedInstance]registry]objectForKey:identifier];
-    if(existingUser)
-        return existingUser;
+    
+    CKWeakRef* existingUserWeakRef = [[[UserRegistry sharedInstance]registry]objectForKey:identifier];
+    if(existingUserWeakRef)
+        return existingUserWeakRef.object;
     
     User* newUser = [User object];
     CKMappingContext* context = [CKMappingContext contextWithIdentifier:@"$UserBase"];
     [context mapValue:dictionary toObject:newUser error:error];
-    [[[UserRegistry sharedInstance]registry] setObject:newUser forKey:identifier];
+    
+    //A weakref do not retain it's referencing object
+    //That's what we want here !
+    //By this way we delegate the life duration of User objects to the document's Tweets
+    //If no more tweets in memory reference this user, it will get deleted and removed from the UserRegistry
+    //Thanks to the following block mechanism.
+    
+    CKWeakRef* newUserWeakRef = [CKWeakRef weakRefWithObject:newUser block:^(CKWeakRef *weakRef) {
+        [[[UserRegistry sharedInstance]registry]removeObjectForKey:[weakRef.object identifier]];
+    }];
+    [[[UserRegistry sharedInstance]registry] setObject:newUserWeakRef forKey:identifier];
+    
     return newUser;
 }
 

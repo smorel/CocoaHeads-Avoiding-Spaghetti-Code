@@ -27,11 +27,11 @@
     [cellControllerFactory addItemForObjectOfClass:[Tweet class] withControllerCreationBlock:^CKCollectionCellController *(id object, NSIndexPath *indexPath) {
         CKTableViewCellController* cellController = [CellControllerFactory cellControllerForTweet:object
                                                                                            intent:^(CKTableViewCellController *cellController, NSInteger intent, Tweet *tweet) {
-                                                                                               //Forwards the intent to the mediator
-                                                                                               if(intentBlock){
-                                                                                                   intentBlock(cellController.containerController,intent,tweet);
-                                                                                               }
-                                                                                           }];
+            //Forwards the intent to the mediator
+            if(intentBlock){
+                intentBlock(cellController.containerController,intent,tweet);
+            }
+        }];
         return cellController;
     }];
     
