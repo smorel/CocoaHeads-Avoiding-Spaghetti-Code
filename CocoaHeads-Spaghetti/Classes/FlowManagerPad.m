@@ -1,28 +1,23 @@
 //
-//  Sample.m
+//  FlowManagerPad.m
 //  CocoaHeads-Spaghetti
 //
 //  Created by Sebastien Morel on 12-12-10.
 //  Copyright (c) 2012 Sebastien Morel. All rights reserved.
 //
 
-#import "FlowManager.h"
+#import "FlowManagerPad.h"
 #import "WebService.h"
 #import "ViewControllerFactory.h"
 
-@interface Intent : NSObject
-@property (nonatomic,retain) id source;
-@property (nonatomic,retain) id event;
-@property (nonatomic,retain) id object;
+@interface FlowManagerPad()
+@property(nonatomic,retain) CKContainerViewController* rightViewController;
 @end
 
-@implementation Intent
-@end
-
-@implementation FlowManager
+@implementation FlowManagerPad
 
 - (void)startInWindow:(UIWindow*)window{
-    __block FlowManager* bself = self;
+    __block FlowManagerPad* bself = self;
     
     //Setup the document and its remote data source
     Timeline* sharedTimeline = [Timeline sharedInstance];
@@ -34,11 +29,11 @@
         Tweet* tweet = (Tweet*)object;
         switch(intent){
             case TweetAvatarTouchIntent:{
-                [bself presentsViewControllerForUserDetails:tweet.user fromViewController:viewController];
+                [bself presentsViewControllerForTweetDetails:tweet fromViewController:viewController];
                 break;
             }
             case TweetSelectionIntent:{
-                [bself presentsViewControllerForTweetDetails:tweet fromViewController:viewController];
+                [bself presentsViewControllerForUserDetails:tweet.user fromViewController:viewController];
                 break;
             }
         }
@@ -47,19 +42,38 @@
     //Customizing the ViewController navigation item (This is specific for the iPhone Flow)
     __block CKViewController* bTimelineController = timelineController;
     timelineController.title = _(@"Spaghetti - Home");
-    timelineController.rightButton = [[UIBarButtonItem alloc]initWithTitle:_(@"Write") style:UIBarButtonItemStyleBordered block:^{
+    
+    //Sets the window's root view controller
+    UINavigationController* leftNavigationController = [UINavigationController navigationControllerWithRootViewController:timelineController];
+    leftNavigationController.splitViewConstraints.type = CKSplitViewConstraintsTypeFixedSizeInPixels;
+    leftNavigationController.splitViewConstraints.size = 320;
+    
+    //Setup the right view controller container
+    self.rightViewController = [CKContainerViewController controller];
+    self.rightViewController.rightButton = [[UIBarButtonItem alloc]initWithTitle:_(@"Write") style:UIBarButtonItemStyleBordered block:^{
         [bself presentsViewControllerForNewTweetFromViewController:bTimelineController];
     }];
     
-    //Sets the window's root view controller
-    UINavigationController* mainNavigationController = [UINavigationController navigationControllerWithRootViewController:timelineController];
-    window.rootViewController = mainNavigationController;
+    UINavigationController* rightNavigationController = [UINavigationController navigationControllerWithRootViewController:self.rightViewController];
+    
+    //Setup a Black separator view controller in-between left and right controllers
+    CKViewController* separator = [CKViewController controller];
+    separator.viewWillAppearEndBlock = ^(CKViewController* controller, BOOL animated){
+        controller.view.backgroundColor = [UIColor blackColor];
+    };
+    separator.splitViewConstraints.type = CKSplitViewConstraintsTypeFixedSizeInPixels;
+    separator.splitViewConstraints.size = 1;
+    
+    //Creates the splitter
+    CKSplitViewController* splitter = [CKSplitViewController splitViewControllerWithViewControllers:[NSArray arrayWithObjects:leftNavigationController,separator,rightNavigationController,nil]
+                                                                                        orientation:CKSplitViewOrientationHorizontal];
+    window.rootViewController = splitter;
 }
 
 
 
 - (void)presentsViewControllerForUserDetails:(User*)user fromViewController:(CKViewController*)viewController{
-    __block FlowManager* bself = self;
+    __block FlowManagerPad* bself = self;
     
     //We wrap 2 controllers that can be created at different time in a container controller.
     //A pending controller displaying a spinner and the user detail controller that will get created when the data has been fetched.
@@ -112,7 +126,7 @@
         presentationBlock(container,NO);
     }
     
-    [viewController.navigationController pushViewController:container animated:YES];
+    [self.rightViewController setViewControllers:[NSArray arrayWithObject:container]];
 }
 
 - (void)presentsViewControllerForTweetDetails:(Tweet*)tweet fromViewController:(CKViewController*)viewController{

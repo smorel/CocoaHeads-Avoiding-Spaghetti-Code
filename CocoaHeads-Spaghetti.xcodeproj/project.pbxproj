@@ -30,7 +30,7 @@
 		960C5B8B16765A730084943A /* Stylesheet.style in Resources */ = {isa = PBXBuildFile; fileRef = 960C5B8A16765A730084943A /* Stylesheet.style */; };
 		960C5B8E16765A730084943A /* Api.mappings in Resources */ = {isa = PBXBuildFile; fileRef = 960C5B8D16765A730084943A /* Api.mappings */; };
 		960C5B9416765A730084943A /* Localization.strings in Resources */ = {isa = PBXBuildFile; fileRef = 960C5B9316765A730084943A /* Localization.strings */; };
-		960C5BA416765AE90084943A /* FlowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 960C5BA316765AE90084943A /* FlowManager.m */; };
+		960C5BA416765AE90084943A /* FlowManagerPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 960C5BA316765AE90084943A /* FlowManagerPhone.m */; };
 		960C5BA616766FB50084943A /* default_avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 960C5BA516766FB50084943A /* default_avatar.png */; };
 		960C5BA8167672600084943A /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960C5BA7167672600084943A /* Twitter.framework */; };
 		960C5BAA167672660084943A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960C5BA9167672660084943A /* Accounts.framework */; };
@@ -55,6 +55,7 @@
 		9659041A16769F00008F8EAC /* ViewControllers.style in Resources */ = {isa = PBXBuildFile; fileRef = 9659041916769F00008F8EAC /* ViewControllers.style */; };
 		9692EBC71676C17700B43879 /* background_nav-480.png in Resources */ = {isa = PBXBuildFile; fileRef = 9692EBC51676C17700B43879 /* background_nav-480.png */; };
 		9692EBC81676C17700B43879 /* background_nav-480@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9692EBC61676C17700B43879 /* background_nav-480@2x.png */; };
+		96C381061677DD7A007DD3EB /* FlowManagerPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C381051677DD7A007DD3EB /* FlowManagerPad.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,8 +87,8 @@
 		960C5B8D16765A730084943A /* Api.mappings */ = {isa = PBXFileReference; lastKnownFileType = text; name = Api.mappings; path = Resources/Api.mappings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		960C5B9316765A730084943A /* Localization.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Localization.strings; path = Resources/Localization.strings; sourceTree = "<group>"; };
 		960C5B9516765A730084943A /* Entitlements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
-		960C5BA216765AE90084943A /* FlowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlowManager.h; path = Classes/FlowManager.h; sourceTree = "<group>"; };
-		960C5BA316765AE90084943A /* FlowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlowManager.m; path = Classes/FlowManager.m; sourceTree = "<group>"; };
+		960C5BA216765AE90084943A /* FlowManagerPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlowManagerPhone.h; path = Classes/FlowManagerPhone.h; sourceTree = "<group>"; };
+		960C5BA316765AE90084943A /* FlowManagerPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlowManagerPhone.m; path = Classes/FlowManagerPhone.m; sourceTree = "<group>"; };
 		960C5BA516766FB50084943A /* default_avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = default_avatar.png; path = Resources/default_avatar.png; sourceTree = "<group>"; };
 		960C5BA7167672600084943A /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		960C5BA9167672660084943A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
@@ -116,6 +117,8 @@
 		9659041916769F00008F8EAC /* ViewControllers.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ViewControllers.style; path = Resources/ViewControllers.style; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		9692EBC51676C17700B43879 /* background_nav-480.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "background_nav-480.png"; path = "Resources/background_nav-480.png"; sourceTree = "<group>"; };
 		9692EBC61676C17700B43879 /* background_nav-480@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "background_nav-480@2x.png"; path = "Resources/background_nav-480@2x.png"; sourceTree = "<group>"; };
+		96C381041677DD79007DD3EB /* FlowManagerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlowManagerPad.h; path = Classes/FlowManagerPad.h; sourceTree = "<group>"; };
+		96C381051677DD7A007DD3EB /* FlowManagerPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlowManagerPad.m; path = Classes/FlowManagerPad.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,8 +230,10 @@
 			children = (
 				965903FF16769E0D008F8EAC /* Stylesheet */,
 				960C5B9316765A730084943A /* Localization.strings */,
-				960C5BA216765AE90084943A /* FlowManager.h */,
-				960C5BA316765AE90084943A /* FlowManager.m */,
+				960C5BA216765AE90084943A /* FlowManagerPhone.h */,
+				960C5BA316765AE90084943A /* FlowManagerPhone.m */,
+				96C381041677DD79007DD3EB /* FlowManagerPad.h */,
+				96C381051677DD7A007DD3EB /* FlowManagerPad.m */,
 				965903F3167694D9008F8EAC /* Document.h */,
 				965903F4167694D9008F8EAC /* Document.m */,
 				965903F616769505008F8EAC /* ViewControllerFactory.h */,
@@ -378,11 +383,12 @@
 			files = (
 				960C5B7116765A730084943A /* main.m in Sources */,
 				960C5B7516765A730084943A /* AppDelegate.m in Sources */,
-				960C5BA416765AE90084943A /* FlowManager.m in Sources */,
+				960C5BA416765AE90084943A /* FlowManagerPhone.m in Sources */,
 				965903F5167694D9008F8EAC /* Document.m in Sources */,
 				965903F816769505008F8EAC /* ViewControllerFactory.m in Sources */,
 				965903FB1676956A008F8EAC /* WebService.m in Sources */,
 				965903FE1676963A008F8EAC /* CellControllerFactory.m in Sources */,
+				96C381061677DD7A007DD3EB /* FlowManagerPad.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

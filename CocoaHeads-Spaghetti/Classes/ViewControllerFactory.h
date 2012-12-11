@@ -12,18 +12,19 @@
 @interface ViewControllerFactory : NSObject
 
 //Timeline
-typedef enum TweetIntent{ TweetAvatarTouchIntent, TweetSelectionIntent }TweetIntent;
+typedef enum TweetIntent{ TweetAvatarTouchIntent, TweetSelectionIntent } TweetIntent;
+
 + (CKViewController*)viewControllerForTimeline:(Timeline*)timeline
                                         intent:(void(^)(CKViewController* viewController, NSInteger intent, id object))intent;
 
 
 //User Details
-typedef enum UserIntent{ UserTweetAvatarTouchIntent = TweetAvatarTouchIntent, UserTweetSelectionIntent = TweetSelectionIntent, UserSendMessageIntent }UserIntent;
+typedef enum UserIntent{ UserTweetAvatarTouchIntent = TweetAvatarTouchIntent, UserTweetSelectionIntent = TweetSelectionIntent, UserSendMessageIntent } UserIntent;
+
 + (CKViewController*)viewControllerForUserDetails:(User*)user
                                            intent:(void(^)(CKViewController* viewController, NSInteger intent, id object))intent;
 
-
-
+//Pending Operations
 + (CKViewController*)viewControllerForPendingOperation;
 
 @end

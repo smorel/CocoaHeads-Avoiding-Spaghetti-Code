@@ -27,25 +27,24 @@
     //  Request permission from the user to access the available Twitter accounts
     [store requestAccessToAccountsWithType:twitterAccountType
                      withCompletionHandler:^(BOOL granted, NSError *error) {
-                         if (!granted) {
-                             // The user rejected your request
-                             NSLog(@"User rejected access to the account.");
-                             completionBlock(nil);
-                         }
-                         else {
-                             // Grab the available accounts
-                             NSArray *twitterAccounts =
-                             [store accountsWithAccountType:twitterAccountType];
+        if (!granted) {
+            // The user rejected your request
+            NSLog(@"User rejected access to the account.");
+            completionBlock(nil);
+        }
+        else {
+            // Grab the available accounts
+            NSArray *twitterAccounts = [store accountsWithAccountType:twitterAccountType];
                              
-                             if ([twitterAccounts count] > 0) {
-                                 // Use the first account for simplicity
-                                 ACAccount *account = [twitterAccounts objectAtIndex:0];
-                                 completionBlock(account);
-                             }else{
-                                 completionBlock(nil);
-                             }
-                         }
-                     }];
+            if ([twitterAccounts count] > 0) {
+                // Use the first account for simplicity
+                ACAccount *account = [twitterAccounts objectAtIndex:0];
+                completionBlock(account);
+            }else{
+                completionBlock(nil);
+            }
+        }
+    }];
 }
 
 
@@ -55,37 +54,34 @@
     block([objects objectAtIndex:1],[objects objectAtIndex:2],[errorObject isKindOfClass:[NSNull class]] ? nil : errorObject);
 }
 
-+ (void)asyncTwitterRequestWithURL:(NSURL*)url params:(NSDictionary*)params completion:(void(^)(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error ))completion{
-    //Initialize static GCD queue for twitter requests
-    //static dispatch_queue_t twitterQueue = nil;
-    //if(!twitterQueue){
-    //    twitterQueue = dispatch_queue_create("com.wherecloud.spaghetti", 0);
-    //}
++ (void)asyncTwitterRequestWithURL:(NSURL*)url
+                            params:(NSDictionary*)params
+                        completion:(void(^)(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error ))completion{
     
+    //Requests the first twitter account from the device
     [self requestTwitterAccountWithCompletionBlock:^(ACAccount* account){
         if(!account){
             [self performSelector:@selector(authentificationError) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
         }else{
-            //dispatch_async(twitterQueue, ^{
-                TWRequest *request = [[TWRequest alloc] initWithURL:url
-                                                         parameters:params
-                                                      requestMethod:TWRequestMethodGET];
-                request.account = account;
-                
-                // Notice this is a block, it is the handler to process the response
-                [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
-                    NSArray* objects = [NSArray arrayWithObjects:[completion copy],responseData,urlResponse, error ? error : [NSNull null], nil];
-                    [self performSelectorOnMainThread:@selector(performBlockWithObjects:) withObject:objects waitUntilDone:YES];
-                }];
-            //});
+            //Performs twitter request for the specified URL and parameters.
+            TWRequest *request = [[TWRequest alloc] initWithURL:url
+                                                     parameters:params
+                                                  requestMethod:TWRequestMethodGET];
+            request.account = account;
+            
+            [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
+                //Dispatch Completion on Main Thread
+                NSArray* objects = [NSArray arrayWithObjects:[completion copy],responseData,urlResponse, error ? error : [NSNull null], nil];
+                [self performSelectorOnMainThread:@selector(performBlockWithObjects:) withObject:objects waitUntilDone:YES];
+            }];
         }
     }];
-     
 }
 
-+ (CKFeedSource*)feedSourceForTimelineWithURl:(NSURL*)url params:(NSDictionary*)params{
-    CKFeedSource* feedSource = [CKFeedSource feedSource];
++ (CKFeedSource*)feedSourceForTimelineWithURl:(NSURL*)url
+                                       params:(NSDictionary*)params{
     
+    CKFeedSource* feedSource = [CKFeedSource feedSource];
     feedSource.fetchBlock = ^(CKFeedSource* feedSource, NSRange range){
         CKCollection* associatedCollection = (CKCollection*)[feedSource delegate];
         NSString* lastId = (range.location > 0) ? [[associatedCollection objectAtIndex:range.location-1]identifier] : nil;
@@ -97,15 +93,18 @@
                                      nil];
         [dico addEntriesFromDictionary:params];
         
+        //Performs the request asynchronously
         [self asyncTwitterRequestWithURL:url params:dico completion:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
             if ([urlResponse statusCode] == 200){
-                // The response from Twitter is in JSON format
-                // Move the response into a dictionary and print
+                //Converts JSON Raw Data To Array
                 NSError *error;
-                NSArray *dict = [NSObject objectFromJSONData:responseData error:&error];
-                CKMappingContext* context = [CKMappingContext contextWithIdentifier:@"$Tweet"];
-                NSArray* tweets = [context objectsFromValue:dict error:&error];
+                NSArray *array = [NSObject objectFromJSONData:responseData error:&error];
                 
+                //Maps the results into a collection of Tweet Objects
+                CKMappingContext* context = [CKMappingContext contextWithIdentifier:@"$Tweet"];
+                NSArray* tweets = [context objectsFromValue:array error:&error];
+                
+                //Dispatch Completion
                 if([tweets count] > 1){
                     //As max_id returns the previous one in the payload weremove the ist item from the returned list
                     [feedSource addItems:[NSArray arrayWithArray:[tweets objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [tweets count] - 1)]]]];
@@ -124,27 +123,33 @@
 }
 
 + (CKFeedSource*)feedSourceForHomeTimeline{
-    return [self feedSourceForTimelineWithURl:[NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/home_timeline.json"] params:nil];
+    return [self feedSourceForTimelineWithURl:[NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/home_timeline.json"]
+                                       params:nil];
 }
 
 + (CKFeedSource*) feedSourceForUserTimeline:(NSString*)userIdentifier{
-    return [self feedSourceForTimelineWithURl:[NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/user_timeline.json"] params:[NSDictionary dictionaryWithObjectsAndKeys:userIdentifier,@"user_id", nil]];
+    return [self feedSourceForTimelineWithURl:[NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/user_timeline.json"]
+                                       params:[NSDictionary dictionaryWithObjectsAndKeys:userIdentifier,@"user_id", nil]];
 }
 
-+ (void)performRequestForUserDetails:(User*)user completion:(void(^)(User* user, NSError* error))completionBlock{
++ (void)performRequestForUserDetails:(User*)user
+                          completion:(void(^)(User* user, NSError* error))completionBlock{
     
-    
+    //Performs the request asynchronously
     [self asyncTwitterRequestWithURL:[NSURL URLWithString: @"http://api.twitter.com/1.1/users/show.json"]
                               params:[NSDictionary dictionaryWithObjectsAndKeys:user.identifier,@"user_id",nil]
                           completion:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+                              
         if ([urlResponse statusCode] == 200){
-            // The response from Twitter is in JSON format
-            // Move the response into a dictionary and print
+            //Converts JSON Raw Data To Dictionary
             NSError *error;
-            NSArray *dict = [NSObject objectFromJSONData:responseData error:&error];
+            NSDictionary *dict = [NSObject objectFromJSONData:responseData error:&error];
+            
+            //Maps the results into our user object
             CKMappingContext* context = [CKMappingContext contextWithIdentifier:@"$UserDetails"];
             [context mapValue:dict toObject:user error:&error];
             
+            //Dispatch completion
             if(completionBlock){
                 completionBlock(user,NULL);
             }

@@ -7,7 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "FlowManager.h"
+#import "FlowManagerPhone.h"
+#import "FlowManagerPad.h"
 #import <AppCoreKit/AppCoreKit.h>
 
 
@@ -45,8 +46,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [UIWindow  viewWithFrame:[[UIScreen mainScreen] bounds]];
+    
     //Starting the flowManager
-    [[FlowManager sharedInstance] startInWindow:self.window];
+    if([[UIDevice currentDevice]userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        [[FlowManagerPhone sharedInstance] startInWindow:self.window];
+    }else{
+        [[FlowManagerPad sharedInstance] startInWindow:self.window];
+    }
+    
     [self.window makeKeyAndVisible];
     return YES;
 }

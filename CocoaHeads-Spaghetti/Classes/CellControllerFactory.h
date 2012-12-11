@@ -12,6 +12,8 @@
 
 @interface CellControllerFactory : NSObject
 
-+ (CKTableViewCellController*)cellControllerForTweet:(Tweet*)tweet intent:(void(^)(CKTableViewCellController* cellController, NSInteger intent, id object))intent;
+//Tweet
++ (CKTableViewCellController*)cellControllerForTweet:(Tweet*)tweet
+                                              intent:(void(^)(CKTableViewCellController* cellController, NSInteger intent, id object))intent;
 
 @end

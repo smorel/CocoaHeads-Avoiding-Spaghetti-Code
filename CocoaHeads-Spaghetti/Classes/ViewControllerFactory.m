@@ -43,6 +43,7 @@
 
 + (CKViewController*)viewControllerForTimeline:(Timeline*)timeline
                                         intent:(void(^)(CKViewController* viewController, NSInteger intent, id object))intentBlock{
+    
     //Creates a form with the timeline section
     CKFormTableViewController* form = [CKFormTableViewController controller];
     [form addSections:[NSArray arrayWithObject:[self sectionForTimeline:timeline intent:intentBlock]]];
@@ -51,8 +52,6 @@
 
 + (CKViewController*)viewControllerForUserDetails:(User*)user
                                            intent:(void(^)(CKViewController* viewController, NSInteger intent, id object))intentBlock{
-    //we know here that the user has been fetched completly in the flow manager
-    //we dont need to bind on the values
     
     //User Detail section
     CKTableViewCellController* detailCellController = [CKTableViewCellController cellControllerWithTitle:nil
@@ -63,6 +62,8 @@
                                                                                                   action:nil];
     
     //This cell illustrates the Model=>View Synchronization using bindings.
+    //This allow to edit the user's name property and the other views displaying this property will refresh automatically
+    //cf. CellControllerFactory cellControllerForTweet for bindings
     CKTableViewCellController* nameCellController      = [CKTableViewCellController cellControllerWithObject:user keyPath:@"name"];
     
     //Extra informations
@@ -81,6 +82,7 @@
     //User tweets section
     Timeline* userTimeline = [Timeline object];
     userTimeline.tweets.feedSource = [WebService feedSourceForUserTimeline:user.identifier];
+    
     CKFormBindedCollectionSection* userTweetsSection = [self sectionForTimeline:userTimeline intent:intentBlock];
     userTweetsSection.headerTitle = _(@"User Tweets");
     
@@ -97,6 +99,7 @@
         [controller.view insertSubview:backgroundView atIndex:0];
     };
     
+    //Binds the form title property to the user's name property as it can change dynamically
     [form beginBindingsContextByRemovingPreviousBindings];
     [user bind:@"name" toObject:form withKeyPath:@"title"];
     [form endBindingsContext];
@@ -106,7 +109,8 @@
 
 
 + (CKViewController*)viewControllerForPendingOperation{
-    CKViewController* controller = [CKViewController controllerWithName:@"PendingOperation"];
+    
+    CKViewController* controller = [CKViewController controller];
     controller.viewDidLoadBlock = ^(CKViewController* controller){
         UIActivityIndicatorView* spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         spinner.center = CGPointMake(controller.view.width/2,controller.view.height/2);

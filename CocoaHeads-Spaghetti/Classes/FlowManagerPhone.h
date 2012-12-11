@@ -1,5 +1,5 @@
 //
-//  Sample.h
+//  FlowManagerPhone.h
 //  CocoaHeads-Spaghetti
 //
 //  Created by Sebastien Morel on 12-12-10.
@@ -10,7 +10,7 @@
 
 //Flow Management    ----------------------------------------------------------------------
 
-@interface FlowManager : NSObject
+@interface FlowManagerPhone : NSObject
 
 - (void)startInWindow:(UIWindow*)window;
 

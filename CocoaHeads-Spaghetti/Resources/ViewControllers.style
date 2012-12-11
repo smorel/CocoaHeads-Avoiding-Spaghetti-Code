@@ -3,12 +3,13 @@
         "Appearance"
     ],
     
-    "CKFormTableViewController" : {
+    "UIViewController" : {
         "style" : "UITableViewStyleGrouped",
         "rowInsertAnimation" : "UITableViewRowAnimationFade",
         
         "view" : {
-            "backgroundColor" : "0.79 0.79 0.79 1"
+            "backgroundColor" : "0.79 0.79 0.79 1",
+            "clipsToBounds" : 1
         },
         "tableView" : {
             "backgroundColor" : "clearColor"  

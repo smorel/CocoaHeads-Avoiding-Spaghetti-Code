@@ -14,6 +14,7 @@
 
 + (CKTableViewCellController*)cellControllerForTweet:(Tweet*)tweet
                                               intent:(void(^)(CKTableViewCellController* cellController, NSInteger intent, id object))intentBlock{
+    
     CKTableViewCellController* cellController = [CKTableViewCellController cellController];
     
     //Explicitly do not retain cellController when using in blocks to avoid circular references

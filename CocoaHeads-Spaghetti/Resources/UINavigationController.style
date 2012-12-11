@@ -55,10 +55,10 @@
         }
     },
     
-    "UINavigationController[navigationBar.width=320]" : {
+    "UINavigationController[navigationBar.width=320],UINavigationController[navigationBar.width=703]" : {
         "@inherits" : [ "$base_nav" ],
         "navigationBar" : {
-            "backgroundImage" : "background_nav",
+            "backgroundImage" : ["background_nav", "160 0"],
             
             "backBarButtonItem" : {
                 "@inherits" : [ "$back_button" ],
