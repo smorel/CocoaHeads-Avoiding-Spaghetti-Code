@@ -23,8 +23,8 @@
         },
         
         "CKTableViewCellController" : {
+            "cellStyle" : "CKTableViewCellStyleSubtitle2",
             "contentInsets" : "10 10 10 10",
-            "supportedInterfaceOrientations" : "CKInterfaceOrientationPortrait",
             "UITableViewCell" : {
                 "backgroundView" : {
                     "@inherits" : [ "$lightGradient" ],
@@ -41,7 +41,11 @@
                     "@inherits" : [ "$blueGradient" ],
                     "borderColor" : "darkGrayColor",
                     "cornerSize" : 4,
-                    "borderWidth" : 1
+                    "borderWidth" : 1,
+                    
+                    "borderShadowColor" : "0.412 0.620 0.761 1",
+                    "borderShadowRadius" : 4,
+                    "borderShadowOffset" : "0 0"
                 },
                 "textLabel" : {
                     "@inherits" : [ "$cell_title_font", "$transparent_background", "$text_light_shadow" ]
@@ -64,6 +68,18 @@
                     }
                 }
             }
+        },
+        
+        "CKTableViewCellController[value.keyPath=city],CKTableViewCellController[value.keyPath=numberOfFriends],CKTableViewCellController[value.keyPath=numberOfFollowers]" : {
+            "@inherits" : [ "CKTableViewCellController" ],
+            "cellStyle" : "CKTableViewCellStyleValue1"
+        },
+        
+        "CKCollectionTableViewCellController" : {
+            "@inherits" : [ "CKTableViewCellController" ],
+            "manyItemsMessage" : "%d Tweets",
+            "oneItemMessage" : "1 Tweet",
+            "noItemsMessage" : "No Tweets"
         }
     }
 }

@@ -61,16 +61,10 @@
                                                                                                 imageURL:user.avatarURL
                                                                                                imageSize:CGSizeMake(40,40)
                                                                                                   action:nil];
-    detailCellController.cellStyle = CKTableViewCellStyleSubtitle2;
     
     CKTableViewCellController* cityCellController      = [CKTableViewCellController cellControllerWithObject:user keyPath:@"city" readOnly:YES];
-    cityCellController.cellStyle = CKTableViewCellStyleValue1;
-    
     CKTableViewCellController* friendsCellController   = [CKTableViewCellController cellControllerWithObject:user keyPath:@"numberOfFriends" readOnly:YES];
-    friendsCellController.cellStyle = CKTableViewCellStyleValue1;
-    
     CKTableViewCellController* followersCellController = [CKTableViewCellController cellControllerWithObject:user keyPath:@"numberOfFollowers" readOnly:YES];
-    followersCellController.cellStyle = CKTableViewCellStyleValue1;
     
     CKTableViewCellController* sendMessageCellController = [CKTableViewCellController cellControllerWithTitle:_(@"Send Message") action:^(CKTableViewCellController *controller) {
         if(intentBlock){

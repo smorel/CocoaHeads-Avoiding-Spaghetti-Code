@@ -87,10 +87,8 @@
         [cell endBindingsContext];
     }];
     
-    //The CKTableViewCellStyleSubtitle2 but it manages the cell size dynamically to adjust to its content
     //The Layout block is called each time a UITableViewCell changes its bounds
     
-    cellController.cellStyle = CKTableViewCellStyleSubtitle2;
     [cellController setLayoutBlock:^(CKTableViewCellController *controller, UITableViewCell *cell) {
         //Performs the default layout
         [controller performLayout];
