@@ -10,7 +10,14 @@
 #import "WebService.h"
 #import "ViewControllerFactory.h"
 
+@interface Intent : NSObject
+@property (nonatomic,retain) id source;
+@property (nonatomic,retain) id event;
+@property (nonatomic,retain) id object;
+@end
 
+@implementation Intent
+@end
 
 @implementation FlowManager
 

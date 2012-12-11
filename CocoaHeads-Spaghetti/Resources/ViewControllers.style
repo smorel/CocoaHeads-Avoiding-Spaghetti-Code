@@ -67,8 +67,19 @@
                         "borderWidth" : 2
                     }
                 }
+            },
+            "textField" : {
+                "@inherits" : [ "$cell_subtitle_font", "$transparent_background"],
+                "textColor" : "lightGrayColor"
             }
         },
+        
+        /*
+        "CKTableViewCellController[value.keyPath=name]" : {
+            "@inherits" : [ "CKTableViewCellController" ],
+            "cellStyle" : "CKTableViewCellStyleIPhoneForm"
+        },
+         */
         
         "CKTableViewCellController[value.keyPath=city],CKTableViewCellController[value.keyPath=numberOfFriends],CKTableViewCellController[value.keyPath=numberOfFollowers]" : {
             "@inherits" : [ "CKTableViewCellController" ],

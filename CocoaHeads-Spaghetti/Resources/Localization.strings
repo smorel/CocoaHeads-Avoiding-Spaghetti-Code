@@ -6,3 +6,6 @@
 "city" = "City";
 "numberOfFriends" = "Friends";
 "numberOfFollowers" = "Followers";
+
+"name" = "Name";
+"name_Placeholder" = "Enter a name";

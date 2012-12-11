@@ -62,6 +62,10 @@
                                                                                                imageSize:CGSizeMake(40,40)
                                                                                                   action:nil];
     
+    //This cell illustrates the Model=>View Synchronization using bindings.
+    CKTableViewCellController* nameCellController      = [CKTableViewCellController cellControllerWithObject:user keyPath:@"name"];
+    
+    //Extra informations
     CKTableViewCellController* cityCellController      = [CKTableViewCellController cellControllerWithObject:user keyPath:@"city" readOnly:YES];
     CKTableViewCellController* friendsCellController   = [CKTableViewCellController cellControllerWithObject:user keyPath:@"numberOfFriends" readOnly:YES];
     CKTableViewCellController* followersCellController = [CKTableViewCellController cellControllerWithObject:user keyPath:@"numberOfFollowers" readOnly:YES];
@@ -72,7 +76,7 @@
         }
     }];
     
-    CKFormSection* detailsSection = [CKFormSection sectionWithCellControllers:[NSArray arrayWithObjects:detailCellController,cityCellController,friendsCellController,followersCellController,sendMessageCellController,nil]];
+    CKFormSection* detailsSection = [CKFormSection sectionWithCellControllers:[NSArray arrayWithObjects:nameCellController,detailCellController,cityCellController,friendsCellController,followersCellController,sendMessageCellController,nil]];
     
     //User tweets section
     Timeline* userTimeline = [Timeline object];
@@ -92,6 +96,10 @@
         backgroundView.autoresizingMask = UIViewAutoresizingFlexibleSize;
         [controller.view insertSubview:backgroundView atIndex:0];
     };
+    
+    [form beginBindingsContextByRemovingPreviousBindings];
+    [user bind:@"name" toObject:form withKeyPath:@"title"];
+    [form endBindingsContext];
     
     return form;
 }
