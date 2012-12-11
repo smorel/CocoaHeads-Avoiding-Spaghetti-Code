@@ -66,7 +66,11 @@
     separator.splitViewConstraints.size = 1;
     
     //Creates the splitter
-    CKSplitViewController* splitter = [CKSplitViewController splitViewControllerWithViewControllers:[NSArray arrayWithObjects:leftNavigationController,separator,rightNavigationController,nil]
+    CKSplitViewController* splitter = [CKSplitViewController splitViewControllerWithViewControllers:[NSArray arrayWithObjects:
+                                                                                                     leftNavigationController,
+                                                                                                     separator,
+                                                                                                     rightNavigationController,
+                                                                                                     nil]
                                                                                         orientation:CKSplitViewOrientationHorizontal];
     window.rootViewController = splitter;
 }
