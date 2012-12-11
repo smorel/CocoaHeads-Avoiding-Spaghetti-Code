@@ -56,7 +56,7 @@
     
     //We wrap 2 controllers that can be created at different time in a container controller.
     //A pending controller displaying a spinner and the user detail controller that will get created when the data has been fetched.
-    //This is particularily usefull for defining the pending behaviour and to swicth with animations.
+    //This is particularily usefull for defining the pending visual and to swicth with animations.
     
     CKViewController* pendingViewController = [ViewControllerFactory viewControllerForPendingOperation];
     pendingViewController.title = user.name;
