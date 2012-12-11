@@ -54,7 +54,21 @@
 - (void)presentsViewControllerForUserDetails:(User*)user fromViewController:(CKViewController*)viewController{
     __block FlowManager* bself = self;
     
+    //We wrap 2 controllers that can be created at different time in a container controller.
+    //A pending controller displaying a spinner and the user detail controller that will get created when the data has been fetched.
+    //This is particularily usefull for defining the pending behaviour and to swicth with animations.
+    
+    CKViewController* pendingViewController = [ViewControllerFactory viewControllerForPendingOperation];
+    pendingViewController.title = user.name;
+    
+    CKContainerViewController* container = [CKContainerViewController controller];
+    [container setViewControllers:[NSArray arrayWithObject:pendingViewController]];
+    
+    
     //As this code will get called several times Asynchronously or synchronously, we centralize it in a block that gets the job done!
+    //This could have been a method if you prefer ... Defining a block limits the usage of this particular behaviour
+    //To this presentsViewControllerForUserDetails method.
+    
     void(^presentationBlock)(CKContainerViewController* container, BOOL animated) = ^(CKContainerViewController* container, BOOL animated){
         CKViewController* controllerForUserDetails = [ViewControllerFactory viewControllerForUserDetails:user intent:^(CKViewController *viewController, NSInteger intent, id object) {
             switch(intent){
@@ -80,13 +94,6 @@
         
         [container presentViewControllerAtIndex:1 withTransition:animated ? CKTransitionCrossDissolve : CKTransitionNone];
     };
-    
-    
-    CKViewController* pendingViewController = [ViewControllerFactory viewControllerForPendingOperation];
-    pendingViewController.title = user.name;
-    
-    CKContainerViewController* container = [CKContainerViewController controller];
-    [container setViewControllers:[NSArray arrayWithObject:pendingViewController]];
     
     if(!user.hasFetchedDetails){
         [WebService performRequestForUserDetails:user completion:^(User *user, NSError *error) {
