@@ -14,7 +14,7 @@
 @implementation CKLicense(NoSpaghettiSample)
 
 + (NSString*)licenseKey{
-    return @"YourLicenseKey";
+    return @"eS4+1tnvTjV83NmLsYL/cWZUrAgZeFzs21qLnI98Az12+BBrEAJLnbyNC90GJRyfhn9Jqp8myUYg0bwyMi6mB6JPhz0Nc1P/BU+ijHvHP9lYGjOv2n3igoaBUk1oLOWAwppuBYPj38oWiHuTBO/8XidlK2+RJVuhCZ/gXQXi0ppwGr8u9ALpiIZxkoe+p9ubkKoJDZj0Q3TF7VTI+b56QGjTQ/QI2nWDPd/QgR970S66mfHAHSJtXtlOYc8i3rOeoUDsNYmImSxX+ds7DCROMoN2hpJfslgiKuR136yPBJ/Dtn4FCuMryhEP30EqnDZ1jOygdPwnzafEvEoG1iPfNg==";
 }
 
 @end

@@ -22,14 +22,15 @@
         },
         
         "CKTableViewCellController" : {
-            "contentInsets" : "15 10 15 10",
-            "enableNavigationToolbar" : 1,
+            "contentInsets" : "10 10 10 10",
+            "supportedInterfaceOrientations" : "CKInterfaceOrientationPortrait",
             "UITableViewCell" : {
                 "backgroundView" : {
                     "@inherits" : [ "$lightGradient" ],
-                    "borderColor" : "lightGrayColor",
+                    "borderColor" : "darkGrayColor",
                     "borderWidth" : 1,
-                    "cornerSize" : 5,
+                    "cornerSize" : 4,
+                    "separatorColor" : "lightGrayColor",
                     
                     "borderShadowColor" : "0 0 0 0.6",
                     "borderShadowRadius" : 6,
@@ -38,11 +39,28 @@
                 "selectedBackgroundView" : {
                     "@inherits" : [ "$blueGradient" ],
                     "borderColor" : "lightGrayColor",
-                    "cornerSize" : 5,
+                    "cornerSize" : 4,
                     "borderWidth" : 1
                 },
                 "textLabel" : {
                     "@inherits" : [ "$cell_title_font", "$transparent_background", "$text_light_shadow" ]
+                },
+                "detailTextLabel" : {
+                    "@inherits" : [ "$cell_subtitle_font", "$transparent_background"],
+                    "textColor" : "lightGrayColor"
+                },
+                "imageView" : {
+                    "backgroundColor" : "clearColor",
+                    "clipsToBounds" : 0,
+                    "opaque" : 1,
+                    "layer" : {
+                        "shadowColor" : "0 0 0 0.6",
+                        "shadowRadius" : 3,
+                        "shadowOffset" : "0 2",
+                        "shadowOpacity" : "0.8",
+                        "borderColor" : "whiteColor",
+                        "borderWidth" : 2
+                    }
                 }
             }
         }

@@ -3,6 +3,10 @@
         "font" : [ "Helvetica-Bold", 14 ]
     },
     
+    "$cell_subtitle_font" : {
+        "font" : [ "Helvetica", 12 ]
+    },
+    
     "$transparent_background" : {
         "backgroundColor" : "clearColor"
     },
@@ -30,7 +34,7 @@
     },
     
     "$text_dark_shadow" : {
-        "shadowColor" : "blackColor",
+        "shadowColor" : "darkGrayColor",
         "shadowOffset" : "0 1"
     },
     

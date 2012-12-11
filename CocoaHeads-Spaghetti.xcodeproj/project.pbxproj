@@ -53,6 +53,8 @@
 		9659041716769ED8008F8EAC /* Appearance.style in Resources */ = {isa = PBXBuildFile; fileRef = 9659041516769ED8008F8EAC /* Appearance.style */; };
 		9659041816769ED8008F8EAC /* UINavigationController.style in Resources */ = {isa = PBXBuildFile; fileRef = 9659041616769ED8008F8EAC /* UINavigationController.style */; };
 		9659041A16769F00008F8EAC /* ViewControllers.style in Resources */ = {isa = PBXBuildFile; fileRef = 9659041916769F00008F8EAC /* ViewControllers.style */; };
+		9692EBC71676C17700B43879 /* background_nav-480.png in Resources */ = {isa = PBXBuildFile; fileRef = 9692EBC51676C17700B43879 /* background_nav-480.png */; };
+		9692EBC81676C17700B43879 /* background_nav-480@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9692EBC61676C17700B43879 /* background_nav-480@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +114,8 @@
 		9659041516769ED8008F8EAC /* Appearance.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Appearance.style; path = Resources/Appearance.style; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		9659041616769ED8008F8EAC /* UINavigationController.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = UINavigationController.style; path = Resources/UINavigationController.style; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		9659041916769F00008F8EAC /* ViewControllers.style */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ViewControllers.style; path = Resources/ViewControllers.style; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
+		9692EBC51676C17700B43879 /* background_nav-480.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "background_nav-480.png"; path = "Resources/background_nav-480.png"; sourceTree = "<group>"; };
+		9692EBC61676C17700B43879 /* background_nav-480@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "background_nav-480@2x.png"; path = "Resources/background_nav-480@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +257,8 @@
 		9659040016769E16008F8EAC /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				9692EBC51676C17700B43879 /* background_nav-480.png */,
+				9692EBC61676C17700B43879 /* background_nav-480@2x.png */,
 				960C5BA516766FB50084943A /* default_avatar.png */,
 				9659040116769E5D008F8EAC /* background_nav.png */,
 				9659040216769E5D008F8EAC /* background_nav@2x.png */,
@@ -342,6 +348,8 @@
 				9659041716769ED8008F8EAC /* Appearance.style in Resources */,
 				9659041816769ED8008F8EAC /* UINavigationController.style in Resources */,
 				9659041A16769F00008F8EAC /* ViewControllers.style in Resources */,
+				9692EBC71676C17700B43879 /* background_nav-480.png in Resources */,
+				9692EBC81676C17700B43879 /* background_nav-480@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
