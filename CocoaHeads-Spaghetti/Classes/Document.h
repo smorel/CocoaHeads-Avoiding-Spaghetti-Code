@@ -25,7 +25,7 @@
 
 
 @interface UserRegistry : CKObject
-@property(nonatomic,retain) NSMutableDictionary* registry; //User identifier to User instance
+@property(nonatomic,retain) NSMutableDictionary* registry; //User identifier to User instance weakref
 @end
 
 
