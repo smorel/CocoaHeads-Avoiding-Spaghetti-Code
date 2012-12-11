@@ -49,6 +49,12 @@
 }
 
 
++ (void)performBlockWithObjects:(NSArray*)objects{
+    void(^block)(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error ) = [objects objectAtIndex:0];
+    id errorObject = [objects objectAtIndex:3];
+    block([objects objectAtIndex:1],[objects objectAtIndex:2],[errorObject isKindOfClass:[NSNull class]] ? nil : errorObject);
+}
+
 + (void)asyncTwitterRequestWithURL:(NSURL*)url params:(NSDictionary*)params completion:(void(^)(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error ))completion{
     //Initialize static GCD queue for twitter requests
     //static dispatch_queue_t twitterQueue = nil;
@@ -68,7 +74,8 @@
                 
                 // Notice this is a block, it is the handler to process the response
                 [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error){
-                    completion(responseData,urlResponse,error);
+                    NSArray* objects = [NSArray arrayWithObjects:[completion copy],responseData,urlResponse, error ? error : [NSNull null], nil];
+                    [self performSelectorOnMainThread:@selector(performBlockWithObjects:) withObject:objects waitUntilDone:YES];
                 }];
             //});
         }
